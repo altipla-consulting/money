@@ -3,6 +3,7 @@ package money
 import (
 	"fmt"
 	"math/big"
+	"strings"
 
 	"github.com/juju/errors"
 )
@@ -19,8 +20,10 @@ func New() *Money {
 	}
 }
 
-// Parse a string to create a new money value.
+// Parse a string to create a new money value. It can read `XX.YY` and `XX,YY`.
 func Parse(s string) (*Money, error) {
+	s = strings.Replace(s, ",", ".", -1)
+
 	rat := new(big.Rat)
 	if _, err := fmt.Sscan(s, rat); err != nil {
 		return nil, errors.Trace(err)
@@ -29,7 +32,18 @@ func Parse(s string) (*Money, error) {
 	return &Money{rat}, nil
 }
 
-// Format the money value with a specific deciaml precision.
+// Cents returns the value with cents precision (2 decimal places) as a number.
+func (money *Money) Cents() int64 {
+	cents := big.NewInt(100)
+
+	v := money.rat.Num()
+	v.Mul(v, cents)
+	v.Quo(v, money.rat.Denom())
+
+	return v.Int64()
+}
+
+// Format the money value with a specific decimal precision.
 func (money *Money) Format(prec int) string {
 	return money.rat.FloatString(prec)
 }
