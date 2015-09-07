@@ -21,7 +21,12 @@ func New() *Money {
 }
 
 // Parse a string to create a new money value. It can read `XX.YY` and `XX,YY`.
+// An empty string is parsed as zero.
 func Parse(s string) (*Money, error) {
+	if len(s) == 0 {
+		return New(), nil
+	}
+
 	s = strings.Replace(s, ",", ".", -1)
 
 	rat := new(big.Rat)
