@@ -20,6 +20,13 @@ func New() *Money {
 	}
 }
 
+// NewFromCents creates a new instance with a cents value.
+func NewFromCents(cents int64) *Money {
+	return &Money{
+		rat: big.NewRat(cents, 100),
+	}
+}
+
 // Parse a string to create a new money value. It can read `XX.YY` and `XX,YY`.
 // An empty string is parsed as zero.
 func Parse(s string) (*Money, error) {
