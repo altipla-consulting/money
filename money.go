@@ -48,8 +48,8 @@ func Parse(s string) (*Money, error) {
 func (money *Money) Cents() int64 {
 	cents := big.NewInt(100)
 
-	v := money.rat.Num()
-	v.Mul(v, cents)
+	v := new(big.Int)
+	v.Mul(money.rat.Num(), cents)
 	v.Quo(v, money.rat.Denom())
 
 	return v.Int64()
