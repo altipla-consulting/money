@@ -93,3 +93,17 @@ func (money *Money) Div(other *Money) *Money {
 func (money *Money) LessThan(other *Money) bool {
 	return money.rat.Cmp(other.rat) == -1
 }
+
+// AddTaxPercent adds a percentage of the price to itself.
+func (money *Money) AddTaxPercent(tax int64) *Money {
+	result := New()
+	result.rat.Set(money.rat)
+	ratTax := big.NewRat(tax, 100)
+	result.rat.Add(result.rat, ratTax.Mul(ratTax, money.rat))
+	return result
+}
+
+// IsZero returns true if there is no money.
+func (money *Money) IsZero() bool {
+	return money.Cents() == 0
+}
