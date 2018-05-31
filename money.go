@@ -108,7 +108,8 @@ func (money *Money) IsZero() bool {
 	return money.Cents() == 0
 }
 
-// Markup adds a percentage with decimals of the price to itself. The percentage should be pre-multiplied by 100 to avoid floating point issues.
+// Markup adds a percentage with decimals of the price to itself. The
+// percentage should be pre-multiplied by 100 to avoid floating point issues.
 func (money *Money) Markup(tax int64) *Money {
 	result := New()
 	result.rat.Set(money.rat)
