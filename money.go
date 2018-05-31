@@ -107,3 +107,13 @@ func (money *Money) AddTaxPercent(tax int64) *Money {
 func (money *Money) IsZero() bool {
 	return money.Cents() == 0
 }
+
+// Markup adds a percentage with decimals of the price to itself. The
+// percentage should be pre-multiplied by 100 to avoid floating point issues.
+func (money *Money) Markup(tax int64) *Money {
+	result := New()
+	result.rat.Set(money.rat)
+	ratTax := big.NewRat(tax, 10000)
+	result.rat.Add(result.rat, ratTax.Mul(ratTax, money.rat))
+	return result
+}
