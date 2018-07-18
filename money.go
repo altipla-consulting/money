@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"math/big"
 	"strings"
-
-	"github.com/juju/errors"
 )
 
 // Money represents a monetary value
@@ -38,7 +36,7 @@ func Parse(s string) (*Money, error) {
 
 	rat := new(big.Rat)
 	if _, err := fmt.Sscan(s, rat); err != nil {
-		return nil, errors.Trace(err)
+		return nil, fmt.Errorf("money: cannot scan value: %s: %s", s, err)
 	}
 
 	return &Money{rat}, nil
